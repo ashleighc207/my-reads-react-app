@@ -16,6 +16,7 @@ Download or clone this repo to your machine
 - react
 - react-dom
 - react-scripts 
+- Google Fonts - Roboto (400, 700)
 
 
 ## How to Use the App
