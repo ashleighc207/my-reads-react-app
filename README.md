@@ -1,6 +1,6 @@
 # Front-end Nanodegree Project #6
 
-###### React - My Reads Book App
+### React - My Reads Book App
 
 ## Description
 This is a simple React app that allows users to organize and track their books. _Note: starter code was provided. See commits for my work_
