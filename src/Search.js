@@ -19,12 +19,15 @@ class Search extends Component {
     render() {
         const { query } = this.state
         const { books } = this.props
-        let searchBooks;
+        let searchBooks, error;
         if (query){
             const match = new RegExp(escapeRegExp(query), 'i')
             searchBooks = books.filter((book) => match.test(book.title) || match.test(book.authors))
+            if (searchBooks.length == 0){
+                error = 'Sorry, no results found. Please try a different search term';
+            }
         } else {
-            searchBooks = books;
+            searchBooks = [];
         }
         searchBooks.sort(sortBy('title'))
         
@@ -33,26 +36,17 @@ class Search extends Component {
             <div className="search-books-bar">
               <Link to="/" className="close-search">Close</Link>
               <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
                 <input 
                 type="text" 
                 placeholder="Search by title or author" 
                 value={query}
                 onChange={(event) => this.updateQuery(event.target.value)}
                 />
-
               </div>
             </div>
             <div className="search-books-results">
              <ol className="books-grid">
-            {searchBooks.map((book) => (
+            {!error && searchBooks.map((book) => (
                         <li key={book.id} className='books-grid'>
                         <div className="book">
                           <div className="book-top">
@@ -71,7 +65,12 @@ class Search extends Component {
                           <div className="book-authors">{book.authors}</div>
                         </div>
                         </li>
-                    ))}
+            ))}
+            {error &&
+                <li>
+                    {error}
+                </li>
+            }
              </ol>
             </div>
           </div> 
