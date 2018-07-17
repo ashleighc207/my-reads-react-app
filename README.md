@@ -15,7 +15,10 @@ Download or clone this repo to your machine
 - prop-types
 - react
 - react-dom
-- react-scripts 
+- react-scripts
+- escape-string-regexp
+- sort-by
+- react-router-dom
 - Google Fonts - Roboto (400, 700)
 
 
