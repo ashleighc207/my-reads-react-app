@@ -17,8 +17,11 @@ class BooksApp extends Component {
     })
   }
   
-  handleChange = (book, shelf) => {
-    BooksAPI.update(book, shelf).then(res => {
+  handleChange = (book, event) => {
+    console.log(this.state)
+    let e = event.target.value;
+    BooksAPI.update(book, e).then(res => {
+      book.shelf = e;
       this.updateBooks();
     })
   }
