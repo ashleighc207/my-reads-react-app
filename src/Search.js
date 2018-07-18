@@ -8,31 +8,37 @@ class Search extends Component {
     state = {
         query: '',
         results: [],
-        error: ''
+        error: false
     }
     
     search = (event) => {
         let error = '', results = [];
-        const query = event.target.value;
+        let query = event.target.value;
         
         this.setState({ query })
         
         if (query){
         BooksAPI.search(query).then((books) => {
-            books.length > 0 ?  this.setState({results: books}) : this.setState({ results: [] })
+            if (books.length > 0){
+                this.setState({results: books}) 
+                console.log(this.state)
+            } else {
+                this.setState({results: [], error: true})
+                console.log(this.state)
+            }
         })
-        if (results.length == 0){
-            error = 'Sorry, no results found. Please try a different search term';
+        if (results.length === 0){
+             this.setState({results: [], error: false})
+             console.log(this.state)
         }
+    } else {
+        this.setState({results: [], error: false})
     }
-    }
-    clearQuery = () => {
-        this.setState({query: ''})
     }
     
     render() {
-        const { query, results, error } = this.state
         const { books, handleChange } = this.props
+        const { query, results, error } = this.state
         
         return (
             <div className="search-books">
@@ -42,8 +48,8 @@ class Search extends Component {
                 <input 
                 type="text" 
                 placeholder="Search by title or author" 
-                value={query}
-                onChange={this.search}
+                value={this.state.query}
+                onChange={(event) => this.search(event)}
                 />
               </div>
             </div>
@@ -71,7 +77,7 @@ class Search extends Component {
             ))}
             {error &&
                 <li>
-                    {error}
+                    Sorry, no results found. Please try a different search term
                 </li>
             }
              </ol>
