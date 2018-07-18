@@ -1,35 +1,38 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import * as BooksAPI from './BooksAPI'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 
 class Search extends Component {
     state = {
-        query: ''
+        query: '',
+        results: [],
+        error: ''
     }
     
-    updateQuery = (query) => {
+    search = (event) => {
+        let error = '', results = [];
+        const query = event.target.value;
+        
         this.setState({ query })
+        
+        if (query){
+        BooksAPI.search(query).then((books) => {
+            books.length > 0 ?  this.setState({results: books}) : this.setState({ results: [] })
+        })
+        if (results.length == 0){
+            error = 'Sorry, no results found. Please try a different search term';
+        }
     }
-    
+    }
     clearQuery = () => {
         this.setState({query: ''})
     }
     
     render() {
-        const { query } = this.state
-        const { books } = this.props
-        let searchBooks, error;
-        if (query){
-            const match = new RegExp(escapeRegExp(query), 'i')
-            searchBooks = books.filter((book) => match.test(book.title) || match.test(book.authors))
-            if (searchBooks.length == 0){
-                error = 'Sorry, no results found. Please try a different search term';
-            }
-        } else {
-            searchBooks = [];
-        }
-        searchBooks.sort(sortBy('title'))
+        const { query, results, error } = this.state
+        const { books, handleChange } = this.props
         
         return (
             <div className="search-books">
@@ -40,19 +43,19 @@ class Search extends Component {
                 type="text" 
                 placeholder="Search by title or author" 
                 value={query}
-                onChange={(event) => this.updateQuery(event.target.value)}
+                onChange={this.search}
                 />
               </div>
             </div>
             <div className="search-books-results">
              <ol className="books-grid">
-            {!error && searchBooks.map((book) => (
+            {!error && results.map((book) => (
                         <li key={book.id} className='books-grid'>
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: "url(" + `${book.imageLinks.smallThumbnail}` + ")" }}></div>
                             <div className="book-shelf-changer">
-                              <select>
+                              <select value={book.shelf} onChange={(event) => this.props.handleChange(book, event)}>
                                 <option value="move" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
