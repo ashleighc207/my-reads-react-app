@@ -9,6 +9,7 @@ class BooksApp extends Component {
   state = {
     books: []
   }
+
   
   componentDidMount(){
     BooksAPI.getAll().then((books) => {
@@ -16,17 +17,32 @@ class BooksApp extends Component {
     })
   }
   
+  handleChange = (book, shelf) => {
+    BooksAPI.update(book, shelf).then(res => {
+      this.updateBooks();
+    })
+  }
+  
+  updateBooks(){
+    BooksAPI.getAll().then((books) => {
+      this.setState({ books })
+    })
+  }
+  
+  
   render() {
     return (
       <div className="app">
         <Route exact path='/' render={() => (
           <BookShelf
             books={this.state.books}
+            handleChange={this.handleChange}
           />
         )}/>
         <Route exact path='/search' render={() => (
           <Search
             books={this.state.books}
+            handleChange={this.handleChange}
           />
         )}/>
       </div>
