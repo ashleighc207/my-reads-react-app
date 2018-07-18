@@ -21,15 +21,12 @@ class Search extends Component {
         BooksAPI.search(query).then((books) => {
             if (books.length > 0){
                 this.setState({results: books}) 
-                console.log(this.state)
             } else {
                 this.setState({results: [], error: true})
-                console.log(this.state)
             }
         })
         if (results.length === 0){
              this.setState({results: [], error: false})
-             console.log(this.state)
         }
     } else {
         this.setState({results: [], error: false})
