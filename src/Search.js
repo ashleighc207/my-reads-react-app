@@ -32,18 +32,19 @@ class Search extends Component {
     
       updateBooks(books) {
         const currentBooks = books.map(book => {
-          this.props.myBooks.forEach(currentBook => {
-            if (book.id === currentBook.id) {
-              book.shelf = currentBook.shelf;
-            } else {
-                book.shelf = 'none';
-            }
+            book.shelf = 'none';
+          this.props.myBooks.forEach(myBook => {
+            if (book.id === myBook.id) {
+              book.shelf = myBook.shelf;
+            } 
           });
           return book;
         });
+        
         this.setState({
           results: currentBooks
         });
+        
       }
     
     
