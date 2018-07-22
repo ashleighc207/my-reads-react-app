@@ -37,13 +37,13 @@ class BooksApp extends Component {
       <div className="app">
         <Route exact path='/' render={() => (
           <BookShelf
-            books={this.state.books}
+            myBooks={this.state.books}
             handleChange={this.handleChange}
           />
         )}/>
         <Route exact path='/search' render={() => (
           <Search
-            books={this.state.books}
+            myBooks={this.state.books}
             handleChange={this.handleChange}
           />
         )}/>

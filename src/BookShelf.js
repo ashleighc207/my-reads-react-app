@@ -6,12 +6,12 @@ import * as BooksAPI from './BooksAPI'
 
 class BookShelf extends Component {
     render() {
-        const { books, handleChange } = this.props;
+        const { myBooks, handleChange } = this.props;
         let wantToRead, currentlyReading, read;
         
-        currentlyReading = books.filter((book) => book.shelf == 'currentlyReading')
-        wantToRead = books.filter((book) => book.shelf == 'wantToRead')
-        read = books.filter((book) => book.shelf == 'read')
+        currentlyReading = myBooks.filter((book) => book.shelf == 'currentlyReading')
+        wantToRead = myBooks.filter((book) => book.shelf == 'wantToRead')
+        read = myBooks.filter((book) => book.shelf == 'read')
 
         return(
         <div className="list-books">

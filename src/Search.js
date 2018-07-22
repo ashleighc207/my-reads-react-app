@@ -18,23 +18,37 @@ class Search extends Component {
         this.setState({ query })
         
         if (query){
-        BooksAPI.search(query).then((books) => {
-            if (books.length > 0){
-                this.setState({results: books}) 
-            } else {
-                this.setState({results: [], error: true})
-            }
-        })
-        if (results.length === 0){
-             this.setState({results: [], error: false})
+            BooksAPI.search(query).then((books) => {
+                if (books.length > 0){
+                     this.updateBooks(books);
+                } else {
+                    this.setState({error: true})
+                }
+            })
+        } else {
+            this.setState({results: [], error: false})
         }
-    } else {
-        this.setState({results: [], error: false})
-    }
     }
     
+      updateBooks(books) {
+        const currentBooks = books.map(book => {
+          this.props.myBooks.forEach(currentBook => {
+            if (book.id === currentBook.id) {
+              book.shelf = currentBook.shelf;
+            } else {
+                book.shelf = 'none';
+            }
+          });
+          return book;
+        });
+        this.setState({
+          results: currentBooks
+        });
+      }
+    
+    
     render() {
-        const { books, handleChange } = this.props
+        const { myBooks, handleChange } = this.props
         const { query, results, error } = this.state
         
         return (
@@ -52,6 +66,11 @@ class Search extends Component {
             </div>
             <div className="search-books-results">
              <ol className="books-grid">
+             {!query &&
+                 <li>
+                    To search for a new book, type in your keyword
+                </li>
+             }
             {!error && results.map((book) => (
                         <li key={book.id} className='books-grid'>
                         <div className="book">
