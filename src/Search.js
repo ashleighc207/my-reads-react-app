@@ -38,6 +38,9 @@ class Search extends Component {
               book.shelf = myBook.shelf;
             } 
           });
+          if(!book.imageLinks){
+              book.imageLinks = {thumbnail: 'https://cohenwoodworking.com/wp-content/uploads/2016/09/300x500.gif'}
+          }
           return book;
         });
         
@@ -76,7 +79,7 @@ class Search extends Component {
                         <li key={book.id} className='books-grid'>
                         <div className="book">
                           <div className="book-top">
-                            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: "url(" + `${book.imageLinks.smallThumbnail}` + ")" }}></div>
+                            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: "url(" + `${book.imageLinks.thumbnail}` + ")" }}></div>
                             <div className="book-shelf-changer">
                               <select value={book.shelf} onChange={(event) => this.props.handleChange(book, event)}>
                                 <option value="move" disabled>Move to...</option>
