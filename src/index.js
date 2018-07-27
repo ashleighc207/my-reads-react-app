@@ -5,6 +5,6 @@ import App from './App'
 import './index.css'
 
 ReactDOM.render(
-    <BrowserRouter basename="https://ashleighc207.github.io/my-reads-react-app"><App /></BrowserRouter>, 
+    <BrowserRouter basename="/my-reads-react-app"><App /></BrowserRouter>, 
     document.getElementById('root')
 )
