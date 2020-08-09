@@ -1,24 +1,36 @@
 {
+  "homepage": "https://ashleighc207.github.io/my-reads-react-app/",
   "dependencies": {
-    "create-react-app": "^1.5.2",
-    "escape-string-regexp": "^1.0.5",
-    "gh-pages": "^1.2.0",
-    "homepage" : "https://ashleighc207.github.io/my-reads-react-app/",
+    "create-react-app": "^3.4.1",
+    "escape-string-regexp": "^4.0.0",
+    "gh-pages": "^3.1.0",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
-    "react-router-dom": "^4.3.1",
+    "react-router-dom": "^5.2.0",
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
-    "react-scripts": "1.1.4"
+    "react-scripts": "^3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
