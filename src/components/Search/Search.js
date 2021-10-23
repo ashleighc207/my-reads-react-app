@@ -1,36 +1,17 @@
-import React, { Component } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { BookOptions } from "../Book/BookOptions.js";
 import * as BooksAPI from "../../BooksAPI";
 
-class Search extends Component {
-  state = {
-    query: "",
-    results: [],
-    error: false
-  };
+export const Search = ({ handleChange, myBooks }) => {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [error, setError] = useState(false);
 
-  search = event => {
-    let query = event.target.value;
-
-    this.setState({ query });
-
-    if (query) {
-      BooksAPI.search(query).then(books => {
-        if (books.length > 0) {
-          this.updateBooks(books);
-        } else {
-          this.setState({ error: true });
-        }
-      });
-    } else {
-      this.setState({ results: [], error: false });
-    }
-  };
-
-  updateBooks(books) {
-    const currentBooks = books.map(book => {
+  const updateBooks = (books) => {
+    const currentBooks = books.map((book) => {
       book.shelf = "none";
-      this.props.myBooks.forEach(myBook => {
+      myBooks.forEach((myBook) => {
         if (book.id === myBook.id) {
           book.shelf = myBook.shelf;
         }
@@ -38,84 +19,74 @@ class Search extends Component {
       if (!book.imageLinks) {
         book.imageLinks = {
           thumbnail:
-            "https://cohenwoodworking.com/wp-content/uploads/2016/09/300x500.gif"
+            "https://cohenwoodworking.com/wp-content/uploads/2016/09/300x500.gif",
         };
       }
       return book;
     });
+    setResults(currentBooks);
+  };
 
-    this.setState({
-      results: currentBooks
-    });
-  }
+  useEffect(() => {
+    if (query) {
+      setError(false);
+      setResults([]);
+      BooksAPI.search(query).then((books) => {
+        if (books.length > 0) {
+          updateBooks(books);
+        } else {
+          setError(true);
+        }
+      });
+    } else {
+      setError(false);
+      setResults([]);
+    }
+  }, [query]);
 
-  render() {
-    const { handleChange } = this.props;
-    const { query, results, error } = this.state;
-
-    return (
-      <div className="search-books">
-        <div className="search-books-bar">
-          <Link to="/" className="close-search">
-            Close
-          </Link>
-          <div className="search-books-input-wrapper">
-            <input
-              type="text"
-              placeholder="Search by title or author"
-              value={this.state.query}
-              onChange={event => this.search(event)}
-            />
-          </div>
-        </div>
-        <div className="search-books-results">
-          <ol className="books-grid">
-            {!query && <li>To search for a new book, type in your keyword</li>}
-            {!error &&
-              results.map(book => (
-                <li key={book.id} className="books-grid">
-                  <div className="book">
-                    <div className="book-top">
-                      <div
-                        className="book-cover"
-                        style={{
-                          width: 128,
-                          height: 193,
-                          backgroundImage: `url(${book.imageLinks.thumbnail})`
-                        }}
-                      ></div>
-                      <div className="book-shelf-changer">
-                        <select
-                          value={book.shelf}
-                          onChange={event => handleChange(book, event)}
-                        >
-                          <option value="move" disabled>
-                            Move to...
-                          </option>
-                          <option value="currentlyReading">
-                            Currently Reading
-                          </option>
-                          <option value="wantToRead">Want to Read</option>
-                          <option value="read">Read</option>
-                          <option value="none">None</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="book-title">{book.title}</div>
-                    <div className="book-authors">{book.authors}</div>
-                  </div>
-                </li>
-              ))}
-            {error && (
-              <li>
-                Sorry, no results found. Please try a different search term
-              </li>
-            )}
-          </ol>
+  return (
+    <div className="search-books">
+      <div className="search-books-bar">
+        <Link to="/" className="close-search">
+          Close
+        </Link>
+        <div className="search-books-input-wrapper">
+          <input
+            type="text"
+            placeholder="Search by title or author"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
         </div>
       </div>
-    );
-  }
-}
-
-export default Search;
+      <div className="search-books-results">
+        <ol className="books-grid">
+          {!query && <li>To search for a new book, type in your keyword</li>}
+          {!error &&
+            results.map((book) => (
+              <li key={book.id} className="books-grid">
+                <div className="book">
+                  <div className="book-top">
+                    <div
+                      className="book-cover"
+                      style={{
+                        width: 128,
+                        height: 193,
+                        backgroundImage: `url(${book.imageLinks.thumbnail})`,
+                      }}
+                    ></div>
+                    <BookOptions book={book} handleChange={handleChange} />
+                  </div>
+                  <div className="book-title">{book.title}</div>
+                  <div className="book-authors">{book.authors}</div>
+                </div>
+              </li>
+            ))}
+          {error && (
+            <li>Sorry, no results found. Please try a different search term</li>
+          )}
+        </ol>
+      </div>
+    </div>
+  );
+};

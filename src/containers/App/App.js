@@ -1,61 +1,44 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import * as BooksAPI from "../../BooksAPI";
-import "./App.css";
 import { BookShelf, Search } from "../../components";
 import { Route } from "react-router-dom";
+import "./App.css";
 
-class BooksApp extends Component {
-  state = {
-    books: []
-  };
+export const App = () => {
+  const [books, setBooks] = useState([]);
 
-  componentDidMount() {
-    BooksAPI.getAll().then(books => {
-      this.setState({ books });
+  useEffect(() => {
+    BooksAPI.getAll().then((books) => {
+      setBooks(books);
     });
-  }
+  }, []);
 
-  handleChange = (book, event) => {
-    console.log(this.state);
+  const handleChange = (book, event) => {
     let e = event.target.value;
-    BooksAPI.update(book, e).then(res => {
+    BooksAPI.update(book, e).then((res) => {
       book.shelf = e;
-      this.updateBooks();
+      updateBooks();
     });
   };
 
-  updateBooks() {
-    BooksAPI.getAll().then(books => {
-      this.setState({ books });
+  const updateBooks = () => {
+    BooksAPI.getAll().then((books) => {
+      setBooks(books);
     });
-  }
+  };
 
-  render() {
-    return (
-      <div className="app">
-        <Route
-          exact
-          path="/"
-          render={() => (
-            <BookShelf
-              myBooks={this.state.books}
-              handleChange={this.handleChange}
-            />
-          )}
-        />
-        <Route
-          exact
-          path="/search"
-          render={() => (
-            <Search
-              myBooks={this.state.books}
-              handleChange={this.handleChange}
-            />
-          )}
-        />
-      </div>
-    );
-  }
-}
-
-export default BooksApp;
+  return (
+    <div className="app">
+      <Route
+        exact
+        path="/"
+        render={() => <BookShelf myBooks={books} handleChange={handleChange} />}
+      />
+      <Route
+        exact
+        path="/search"
+        render={() => <Search myBooks={books} handleChange={handleChange} />}
+      />
+    </div>
+  );
+};

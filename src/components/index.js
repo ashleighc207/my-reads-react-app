@@ -1,2 +1,2 @@
-export { default as BookShelf } from "./BookShelf/BookShelf";
-export { default as Search } from "./Search/Search";
+export { BookShelf } from "./BookShelf/BookShelf";
+export { Search } from "./Search/Search";
